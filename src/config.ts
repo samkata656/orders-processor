@@ -7,14 +7,14 @@
  * The n8n *Production* webhook URL.
  * In n8n: open the Webhook node -> copy the "Production URL" -> paste it here.
  */
-export const WEBHOOK_URL = 'PASTE_YOUR_N8N_PRODUCTION_WEBHOOK_URL_HERE';
+export const WEBHOOK_URL = 'https://samuilautexp.app.n8n.cloud/webhook/orders-processor';
 
 /**
  * true  = the app fakes the answers so you can click through the UI without n8n.
  * false = the app really calls WEBHOOK_URL.
  * Set this to false once the webhook URL above is filled in.
  */
-export const MOCK_MODE = true;
+export const MOCK_MODE = false;
 
 /**
  * How long to wait for n8n before giving up, in milliseconds.
