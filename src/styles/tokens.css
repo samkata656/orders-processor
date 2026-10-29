@@ -1,0 +1,82 @@
+/*
+  samkoBuilds brand tokens.
+  Every colour, font and timing used in the app comes from here — change a value
+  once and it changes everywhere.
+*/
+
+:root {
+  /* --- Colour ------------------------------------------------------------ */
+  --charcoal-core: #0d0d0f; /* page background, ~60-70% of the surface */
+  --charcoal-900: #17171b; /* cards, chat panel */
+  --charcoal-800: #232328; /* raised surfaces, user message bubbles */
+  --charcoal-700: #2e2e35; /* input backgrounds, hover states */
+  --charcoal-500: #55555f; /* borders, dividers */
+  --charcoal-300: #8c8c96; /* muted and secondary text */
+  --paper: #f2efe9; /* primary text */
+
+  --signal-orange: #ff6b35; /* primary accent — main CTA, focus, active */
+  --signal-blue: #4da6ff; /* secondary accent — links, secondary buttons */
+  --success: #3fb878;
+  --warning: #f2b705;
+  --error: #e5484d;
+
+  /* Tints used for quiet backgrounds behind status colours. */
+  --orange-wash: rgba(255, 107, 53, 0.12);
+  --blue-wash: rgba(77, 166, 255, 0.1);
+  --error-wash: rgba(229, 72, 77, 0.1);
+  --success-wash: rgba(63, 184, 120, 0.1);
+  --warning-wash: rgba(242, 183, 5, 0.1);
+
+  /* Borders come before shadows; shadows stay soft. */
+  --border-subtle: rgba(242, 239, 233, 0.1); /* dividers and card edges */
+  --border-strong: var(--charcoal-500);
+  /* Interactive controls need a 3:1 edge against the page (WCAG 1.4.11),
+     which Charcoal 500 does not reach on this background. One step lighter. */
+  --border-control: #6b6b75;
+  /* Charcoal 300 falls just under 4.5:1 on an input, so placeholders use a
+     slightly lighter grey. */
+  --placeholder: #9b9ba5;
+  --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.28);
+
+  /* --- Type -------------------------------------------------------------- */
+  --font-sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --text-xs: 0.75rem; /* 12px — timestamps, badges */
+  --text-sm: 0.8125rem; /* 13px — labels, buttons */
+  --text-base: 0.9375rem; /* 15px — body and chat messages */
+  --text-lg: 1.0625rem; /* 17px — lede */
+  --text-xl: 1.375rem; /* 22px — section heading */
+  --text-2xl: 1.75rem; /* 28px — page title */
+
+  --leading-body: 1.6;
+  --leading-tight: 1.25;
+
+  /* --- Space ------------------------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* --- Layout ------------------------------------------------------------ */
+  --vp-narrow: 375px;
+  --vp-medium: 768px;
+  --column: 760px; /* reading width of the chat column */
+  --hit: 44px; /* minimum touch target (WCAG AA) */
+
+  /* --- Motion ------------------------------------------------------------ */
+  --motion-100: 100ms;
+  --motion-150: 150ms;
+  --motion-200: 200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+}
