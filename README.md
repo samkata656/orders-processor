@@ -112,8 +112,7 @@ One `POST` to your webhook URL, as `multipart/form-data`, with an
 | `action` | always | `ping`, `message` or `approve` |
 | `sessionId` | always | a random id, new for every conversation |
 | `message` | on `message` | what the employee typed |
-| `draft` | on `approve` | the approved draft as JSON — **the whole object exactly as n8n sent it**, so any extra fields you add (`item`, `quantity`, `deliveryDate`, `confirmationRequired`, …) come straight back alongside `to`, `subject`, `body`, `company`, `contactPerson` |
-| `image` | sometimes | the attached photo (JPG/PNG/WEBP, up to 5 MB) |
+| `image` | sometimes | the attached photo (JPG/PNG/WEBP, up to 5 MB) — sent with the message it was attached to, and again on `approve` if the conversation has one |
 
 n8n must answer with JSON containing a `type`:
 
@@ -126,11 +125,14 @@ n8n must answer with JSON containing a `type`:
 { "type": "error",   "text": "…" }
 ```
 
-The page renders only the five contract fields on the draft card, but it never
-throws the rest away: whatever object arrives under `draft` is kept untouched and
-handed back verbatim on approval. So you can put anything your workflow needs to
-log the order — item, quantity, delivery date, a supplier id — into the draft and
-read it back on the `approve` call without the page having to know about it.
+**Approving sends no draft back.** It is only `action=approve` and the `sessionId`
+(plus the photo, if the conversation had one). n8n looks the approved draft up in
+its own database by that session id. The draft card on screen is there for the
+employee to read before pressing the button — it is not what n8n works from.
+
+If n8n cannot find a draft for that session, or it has already gone out, answer
+with `{ "type": "error", "text": "Няма чернова за изпращане или вече е изпратена." }`.
+The page shows it like any other error, with an **Опитай отново** button.
 
 If n8n answers `401`, the page logs the employee out and asks them to sign in
 again. Anything else that goes wrong shows a message in the chat with a

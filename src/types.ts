@@ -4,7 +4,7 @@
  * The five named fields are the ones the draft card renders, and any of them
  * may be missing. The index signature keeps everything else n8n chose to send
  * (item, quantity, deliveryDate, confirmationRequired, anything added later),
- * because the whole object is handed straight back on approval.
+ * so a new field in n8n is never a type error here.
  */
 export interface Draft {
   to?: string;
@@ -33,7 +33,9 @@ export interface Credentials {
 /** What the user asked for, kept so the "Опитай отново" button can repeat it. */
 export type PendingRequest =
   | { action: 'message'; text: string; image: File | null }
-  | { action: 'approve'; draft: Draft; image: File | null; draftMessageId: string };
+  // An approve only needs to name the draft row again: the draft lives in
+  // n8n's database and the image is re-read from the session.
+  | { action: 'approve'; draftMessageId: string };
 
 /** One row in the chat transcript. */
 export type ChatMessage =

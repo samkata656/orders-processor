@@ -18,12 +18,11 @@ interface SendOptions {
   credentials: Credentials;
   sessionId: string;
   message?: string;
-  draft?: Draft;
   image?: File | null;
 }
 
 export async function sendToAgent(options: SendOptions): Promise<AgentResponse> {
-  const { action, credentials, sessionId, message, draft, image } = options;
+  const { action, credentials, sessionId, message, image } = options;
 
   if (MOCK_MODE) {
     try {
@@ -38,7 +37,8 @@ export async function sendToAgent(options: SendOptions): Promise<AgentResponse> 
   body.append('action', action);
   body.append('sessionId', sessionId);
   if (action === 'message') body.append('message', message ?? '');
-  if (action === 'approve') body.append('draft', JSON.stringify(draft ?? {}));
+  // An approve carries no draft: n8n looks the approved draft up in its own
+  // database by sessionId, so the page only has to say "send it".
   if (image) body.append('image', image, image.name);
 
   // The agent can take 10-40 s, so the request is aborted only after the configured ceiling.
@@ -105,9 +105,9 @@ function normalise(data: unknown): AgentResponse {
         poNumber: typeof payload.poNumber === 'string' ? payload.poNumber : undefined,
       };
     case 'draft': {
-      // The draft is kept exactly as n8n sent it — extra fields and all —
-      // because approving sends the same object straight back. Picking out
-      // only the five contract fields here would silently drop the rest.
+      // The draft is kept exactly as n8n sent it, extra fields and all. The
+      // card renders five of them; the rest are left in place rather than
+      // stripped, so adding a field in n8n never needs a change here.
       const raw = payload.draft;
       const isPlainObject = typeof raw === 'object' && raw !== null && !Array.isArray(raw);
       return {

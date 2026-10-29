@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { RequestError, UnauthorizedError, sendToAgent } from '../api';
 import { MOCK_MODE } from '../config';
-import type { AgentResponse, ChatMessage, Credentials, Draft, PendingRequest } from '../types';
+import type { AgentResponse, ChatMessage, Credentials, PendingRequest } from '../types';
 import { newId } from '../utils';
 import { Composer } from './Composer';
 import { DraftCard } from './DraftCard';
@@ -145,9 +145,11 @@ export function ChatScreen({
     }
   }
 
-  async function runApprove(draft: Draft, draftMessageId: string) {
+  async function runApprove(draftMessageId: string) {
+    // The session image goes along again; the draft itself does not, because
+    // n8n loads the approved draft from its own database.
     const image = lastImageRef.current;
-    const retry: PendingRequest = { action: 'approve', draft, image, draftMessageId };
+    const retry: PendingRequest = { action: 'approve', draftMessageId };
 
     setMessageStatus(draftMessageId, 'sending');
     setBusy(true);
@@ -156,7 +158,6 @@ export function ChatScreen({
         action: 'approve',
         credentials,
         sessionId,
-        draft,
         image,
       });
 
@@ -208,7 +209,7 @@ export function ChatScreen({
     if (retry.action === 'message') {
       void runMessage(retry.text, retry.image, false);
     } else {
-      void runApprove(retry.draft, retry.draftMessageId);
+      void runApprove(retry.draftMessageId);
     }
   }
 
@@ -300,7 +301,7 @@ export function ChatScreen({
                       <DraftCard
                         message={message}
                         isLatest={message.id === latestDraftId}
-                        onApprove={() => void runApprove(message.draft, message.id)}
+                        onApprove={() => void runApprove(message.id)}
                         onRequestChange={requestCorrection}
                       />
                     </AgentFrame>
