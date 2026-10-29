@@ -19,6 +19,9 @@ export function DraftCard({ message, isLatest, onApprove, onRequestChange }: Dra
   // the first click lands and never come back for this card.
   const locked = sent || sending || superseded;
 
+  // Read through orDash so a non-string value from n8n cannot break the row.
+  const contactPerson = orDash(draft.contactPerson);
+
   const titleId = `draft-${message.id}-title`;
 
   return (
@@ -45,8 +48,8 @@ export function DraftCard({ message, isLatest, onApprove, onRequestChange }: Dra
           <dt className="draft__key">Доставчик</dt>
           <dd className="draft__value">
             {orDash(draft.company)}
-            {draft.contactPerson?.trim() && (
-              <span className="draft__contact"> · {draft.contactPerson.trim()}</span>
+            {contactPerson !== '—' && (
+              <span className="draft__contact"> · {contactPerson}</span>
             )}
           </dd>
         </div>

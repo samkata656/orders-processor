@@ -105,18 +105,15 @@ function normalise(data: unknown): AgentResponse {
         poNumber: typeof payload.poNumber === 'string' ? payload.poNumber : undefined,
       };
     case 'draft': {
-      const raw = (payload.draft ?? {}) as Record<string, unknown>;
-      const pick = (key: string) => (typeof raw[key] === 'string' ? (raw[key] as string) : undefined);
+      // The draft is kept exactly as n8n sent it — extra fields and all —
+      // because approving sends the same object straight back. Picking out
+      // only the five contract fields here would silently drop the rest.
+      const raw = payload.draft;
+      const isPlainObject = typeof raw === 'object' && raw !== null && !Array.isArray(raw);
       return {
         type: 'draft',
         text: text || 'Ето черновата.',
-        draft: {
-          to: pick('to'),
-          subject: pick('subject'),
-          body: pick('body'),
-          company: pick('company'),
-          contactPerson: pick('contactPerson'),
-        },
+        draft: isPlainObject ? (raw as Draft) : {},
       };
     }
     case 'error':

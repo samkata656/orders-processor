@@ -28,10 +28,15 @@ export function formatTime(timestamp: number): string {
   }).format(new Date(timestamp));
 }
 
-/** Shows "—" instead of an empty row when n8n leaves a draft field out. */
-export function orDash(value: string | undefined | null): string {
-  const trimmed = (value ?? '').trim();
-  return trimmed === '' ? '—' : trimmed;
+/**
+ * Renders a draft field as text, showing "—" when n8n leaves it out.
+ * A draft now carries whatever fields n8n sends, so a value may not be a
+ * string at all; anything unusable becomes a dash rather than a crash.
+ */
+export function orDash(value: unknown): string {
+  if (value === null || value === undefined) return '—';
+  const text = typeof value === 'string' ? value : String(value);
+  return text.trim() === '' ? '—' : text.trim();
 }
 
 /** Waits, used by mock mode to imitate the agent thinking. */

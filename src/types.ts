@@ -1,10 +1,18 @@
-/** The email draft the n8n agent proposes. Any field may be missing, so all are optional. */
+/**
+ * The email draft the n8n agent proposes.
+ *
+ * The five named fields are the ones the draft card renders, and any of them
+ * may be missing. The index signature keeps everything else n8n chose to send
+ * (item, quantity, deliveryDate, confirmationRequired, anything added later),
+ * because the whole object is handed straight back on approval.
+ */
 export interface Draft {
   to?: string;
   subject?: string;
   body?: string;
   company?: string;
   contactPerson?: string;
+  [key: string]: unknown;
 }
 
 /** The shapes n8n can answer with. Anything else is treated as an error. */
